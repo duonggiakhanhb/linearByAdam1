@@ -2,7 +2,16 @@
 var ALPHABE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 const SEARCH_INTERVAL_TIME = 800;
 let linear_interval;
-var ALPHABET
+var ALPHABET;
+var spd_Change = [
+    { n: 1, name: "x1" },
+    { n: 2, name: "x2" },
+    { n: 8, name: "x8" },
+    { n: 15, name: "x15" }
+]
+var speed = 1;
+var temp = 0;
+const speed_length = spd_Change.length;
 
 
 // ## Helper Functions
@@ -48,13 +57,13 @@ function startLinearSearch(value, set) {
             return;
         }
         current_index += 1;
-    }, SEARCH_INTERVAL_TIME);
+    }, SEARCH_INTERVAL_TIME / speed);
 }
 
 
 
 // ## DOM triggered functions
-function reset() {
+function reset1() {
     clearInterval(linear_interval);
     let exempt = document.querySelectorAll('.exempt');
     Array.prototype.forEach.call(exempt, el => { el.classList.remove('exempt'); });
@@ -64,6 +73,10 @@ function reset() {
     Array.prototype.forEach.call(info, el => { el.innerHTML = '&nbsp;'; });
     enableButton('random-btn');
     enableButton('search-btn');
+}
+
+function reset() {
+    reset1();
     let input = document.getElementById('random-letter');
     input.value = null;
     let uList = document.getElementById("myList");
@@ -102,8 +115,14 @@ function createNumberLI() {
         document.getElementById("myList").appendChild(li);
     }
     let info = document.getElementById("linear-info");
-    info.innerHTML = `adammm`;
+    info.innerHTML = `Adam ne`;
     ALPHABET = args;
+}
+
+function speedChange() {
+    temp = (temp + 1) % speed_length;
+    document.getElementById("speed-btn").innerHTML = spd_Change[temp]["name"];
+    speed = spd_Change[temp]["n"];
 }
 
 function createAlphabetLI() {
@@ -118,7 +137,7 @@ function createAlphabetLI() {
         document.getElementById("myList").appendChild(li);
     }
     info = document.getElementById("linear-info");
-    info.innerHTML = `adam`;
+    info.innerHTML = `Adam dep trai`;
 }
 
 // ## Setup functions
@@ -136,6 +155,7 @@ function setupInputHandlers() {
     random_btn.onclick = function(e) {
         e.preventDefault();
         getRandomLetter();
+        reset1();
     };
     let search_btn = document.getElementById('search-btn');
     search_btn.onclick = function(e) {
@@ -157,6 +177,11 @@ function setupInputHandlers() {
         e.preventDefault();
         reset();
         createNumberLI();
+    }
+    let speed_btn = document.getElementById('speed-btn');
+    speed_btn.onclick = function(e) {
+        e.preventDefault();
+        speedChange();
     }
 }
 
